@@ -10,10 +10,21 @@ export const GlobalContext = createContext(null);
 // create a provider componant
 
 export function MyProvider({ children }) {
+  // random recipes api used in LatestRecipe componant
   const [randomRecipe, setRandomRecipe] = useState([]);
 
-  const [foodHub, setFoodHub] = useState([]);
+  // indian recipe
+  const [indRecipe, setIndRecipe] = useState([]);
 
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  const [inputValue, setInputValue] = useState("");
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [searchedData, setSearchedData] = useState(null);
+
+  // fetch random recipes from spooncular api
   useEffect(() => {
     const handleLoading = async () => {
       try {
@@ -28,33 +39,64 @@ export function MyProvider({ children }) {
 
         setRandomRecipe(data.recipes);
       } catch (error) {
-        console.log("i am printing erro", error);
+        console.log("i am printing error", error);
+      }
+    };
+    handleLoading();
+  }, []);
+
+  // indian recipes
+  useEffect(() => {
+    const handleLoading = async () => {
+      try {
+        const res = await fetch(
+          "https://api.spoonacular.com/recipes/random?apiKey=cef2b6ff157d4c1fb35167b10accb23a&number=5&include_tags=vegiterian&cuisine=panjabi"
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const data = await res.json();
+
+        setIndRecipe(data.recipes);
+      } catch (error) {
+        console.log("i am printing error", error);
       }
     };
     handleLoading();
   }, []);
 
   useEffect(() => {
-    const allRecipe = async () => {
+    const fetchRecipes = async () => {
       try {
-        const res = await fetch("https://dummyjson.com/recipes");
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        setFoodHub(data.recipes);
+        const response = await fetch(
+          `https://api.spoonacular.com/recipes/complexSearch?query=${searchQuery}&apiKey=cef2b6ff157d4c1fb35167b10accb23a`
+        );
+        const data = await response.json();
+        console.log(data.results);
+        setSearchedData(data.results);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching recipes:", error);
       }
     };
 
-    allRecipe();
-  }, []);
+    fetchRecipes();
+  }, [searchQuery]);
 
   return (
-    <GlobalContext.Provider value={{ randomRecipe, foodHub }}>
+    <GlobalContext.Provider
+      value={{
+        randomRecipe,
+        indRecipe,
+
+        selectedRecipe,
+        setSelectedRecipe,
+        inputValue,
+        setInputValue,
+        searchedData,
+        setSearchQuery,
+      }}
+    >
       {children}
     </GlobalContext.Provider>
   );
