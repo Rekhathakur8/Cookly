@@ -54,7 +54,8 @@ const Footer = () => {
             <h2 className="text-xl font-semibold text-white mb-4">Follow Us</h2>
             <div className="flex space-x-4">
               <a
-                href="https://facebook.com"
+
+                
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-[#FFA500]"
@@ -62,7 +63,7 @@ const Footer = () => {
                 <TiSocialFacebookCircular className="text-3xl" />
               </a>
               <a
-                href="https://twitter.com"
+                
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-[#FFA500]"
@@ -70,7 +71,7 @@ const Footer = () => {
                 <FaTwitter className="text-3xl text-white" />
               </a>
               <a
-                href="https://instagram.com"
+               
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-[#FFA500]"
